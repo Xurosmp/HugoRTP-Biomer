@@ -6,6 +6,9 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.RenderTickCounter;
@@ -32,6 +35,8 @@ public class HugoRtpMod implements ClientModInitializer {
     private int attempts = 0;
     private double startX, startY, startZ;
     private String currentBiome = "-";
+    private boolean guiClicked = false;
+    private int guiWait = 0;
 
     @Override
     public void onInitializeClient() {
@@ -87,6 +92,8 @@ public class HugoRtpMod implements ClientModInitializer {
         startY = player.getY();
         startZ = player.getZ();
         elapsed = 0;
+        guiClicked = false;
+        guiWait = 0;
         player.networkHandler.sendChatCommand(config.cleanCommand());
         phase = Phase.WAIT_TP;
     }
@@ -110,6 +117,7 @@ public class HugoRtpMod implements ClientModInitializer {
 
         switch (phase) {
             case WAIT_TP -> {
+                handleGui(client, player);
                 elapsed++;
                 double dx = player.getX() - startX;
                 double dy = player.getY() - startY;
@@ -146,6 +154,40 @@ public class HugoRtpMod implements ClientModInitializer {
             }
             default -> phase = Phase.OFF;
         }
+    }
+
+    /** Klickt im RTP-Menue (falls sich eins oeffnet) auf den eingestellten Slot. */
+    private void handleGui(MinecraftClient client, ClientPlayerEntity player) {
+        if (!config.clickGui || guiClicked || client.interactionManager == null) {
+            return;
+        }
+        if (!(client.currentScreen instanceof HandledScreen<?>)
+                || player.currentScreenHandler == player.playerScreenHandler) {
+            return;
+        }
+        if (++guiWait < Math.max(1, config.guiDelayTicks)) {
+            return;
+        }
+
+        var handler = player.currentScreenHandler;
+        int containerSize = Math.max(0, handler.slots.size() - 36);
+
+        // beim 1. Versuch alle belegten Menue-Slots auflisten, damit man die richtige Nummer findet
+        if (attempts == 1) {
+            StringBuilder sb = new StringBuilder("GUI-Slots: ");
+            for (int i = 0; i < containerSize; i++) {
+                ItemStack s = handler.slots.get(i).getStack();
+                if (!s.isEmpty()) {
+                    sb.append(i).append("=").append(s.getName().getString()).append("  ");
+                }
+            }
+            player.sendMessage(Text.literal("[HugoRTP] " + sb), false);
+        }
+
+        if (config.guiSlot >= 0 && config.guiSlot < handler.slots.size()) {
+            client.interactionManager.clickSlot(handler.syncId, config.guiSlot, 0, SlotActionType.PICKUP, player);
+        }
+        guiClicked = true;
     }
 
     /** @return {voller Name, Pfad} z.B. {"minecraft:cherry_grove", "cherry_grove"} oder null */
