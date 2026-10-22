@@ -10,6 +10,8 @@
   "hugortp.timeout": "Timeout: %ss",
   "hugortp.maxattempts": "Max attempts: %s",
   "hugortp.unlimited": "unlimited",
+  "hugortp.clickgui": "Click menu",
+  "hugortp.guislot": "Menu slot: %s",
   "hugortp.hud": "HUD",
   "hugortp.hudx": "HUD X: %s",
   "hugortp.hudy": "HUD Y: %s",
