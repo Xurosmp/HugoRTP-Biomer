@@ -61,6 +61,14 @@ public class HugoRtpScreen extends Screen {
                         v == 0 ? Text.translatable("hugortp.unlimited").getString() : String.valueOf(v))));
 
         y += step;
+        toggle(left, y, w, () -> Text.translatable("hugortp.clickgui").append(": ")
+                        .append(cfg.clickGui ? ScreenTexts.ON : ScreenTexts.OFF),
+                () -> cfg.clickGui = !cfg.clickGui);
+        addDrawableChild(new IntSlider(right, y, w, 0, 53, clamp(cfg.guiSlot, 0, 53),
+                v -> cfg.guiSlot = v,
+                v -> Text.translatable("hugortp.guislot", v)));
+
+        y += step;
         toggle(left, y, w, () -> Text.translatable("hugortp.hud").append(": ")
                         .append(cfg.hudEnabled ? ScreenTexts.ON : ScreenTexts.OFF),
                 () -> cfg.hudEnabled = !cfg.hudEnabled);
