@@ -1,0 +1,18 @@
+{
+  "key.hugortp.menu": "Open HugoRTP menu",
+  "key.hugortp.toggle": "Start/stop RTP search",
+  "key.category.hugortp.main": "HugoRTP Biomer",
+  "hugortp.title": "HugoRTP Biomer",
+  "hugortp.biomes": "Target biome(s), comma separated",
+  "hugortp.command": "RTP command (without /)",
+  "hugortp.cooldown": "Pause between RTPs: %ss",
+  "hugortp.settle": "Wait after teleport: %ss",
+  "hugortp.timeout": "Timeout: %ss",
+  "hugortp.maxattempts": "Max attempts: %s",
+  "hugortp.unlimited": "unlimited",
+  "hugortp.hud": "HUD",
+  "hugortp.hudx": "HUD X: %s",
+  "hugortp.hudy": "HUD Y: %s",
+  "hugortp.start": "Start search",
+  "hugortp.stop": "Stop search"
+}
