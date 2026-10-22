@@ -20,6 +20,12 @@ public class HugoRtpConfig {
     public int timeoutSeconds = 15;
     /** 0 = unbegrenzt */
     public int maxAttempts = 100;
+    /** Wenn /rtp ein Menue oeffnet (z.B. Overworld/Nether/End): automatisch auf guiSlot klicken. */
+    public boolean clickGui = true;
+    /** Slot-Nummer im Menue, 0 = erster Slot oben links. Die Mod listet beim 1. Versuch alle belegten Slots im Chat. */
+    public int guiSlot = 0;
+    /** Ticks warten, nachdem sich das Menue geoeffnet hat, bevor geklickt wird (20 Ticks = 1 s). */
+    public int guiDelayTicks = 10;
     public boolean hudEnabled = true;
     public int hudX = 4;
     public int hudY = 4;
