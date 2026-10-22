@@ -1,4 +1,4 @@
-name: Build HugoRTP
+name: Build HugoRTP Biomer
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: hugortp
+          name: hugortpbiomer
           path: |
             build/libs/*.jar
             !build/libs/*-sources.jar
